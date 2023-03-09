@@ -36,3 +36,9 @@ nosetests.xml
 .pydevproject
 *~
 *.swp
+
+# Python Environments #
+.env
+.venv
+env/
+venv/

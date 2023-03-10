@@ -52,7 +52,7 @@
     <div class="container">
         <div class="side left">
             <h3>Colours</h3>
-            <input id="colorPicker" type="color" onchange="clickColor">
+            <input id="colorPicker" type="color">
             <div>
                 <input id="eraser" type="checkbox">
                 <label for="eraser">Eraser</label>
@@ -146,6 +146,9 @@ function renderFrame() {
     clearFrame();
     for (var key in world) {
         var entity = world[key];
+        for (var thing in entity) {
+            console.log(thing);
+        }
         drawCircle(context,prepEntity(entity));
     }
 }
@@ -298,7 +301,8 @@ mouse = (function() {
 
 // Add the application specific mouse listeners!
 mouse.mousedowners.push(function(x,y,clicked,e) {
-    addEntityWithoutName({'x':x,'y':y});
+    var newEntity = setEntity(x,y)
+    addEntityWithoutName(newEntity);
 });
 
 // mouse.mouseuppers.push(function(x,y,clicked,e) {
@@ -306,7 +310,8 @@ mouse.mousedowners.push(function(x,y,clicked,e) {
 // });
 
 mouse.mousedraggers.push(function(x,y,clicked,e) {
-    addEntityWithoutName({'x':x,'y':y});
+    var newEntity = setEntity(x,y)
+    addEntityWithoutName(newEntity);
 });
 
 
@@ -325,10 +330,26 @@ function clearCanvas() {
     clearFrame();
 }
 
+function setEntity(x,y) {
+    var entity = {'x':x,'y':y}
+
+    if (document.getElementById('eraser').checked) {
+        entity["colour"] = "black"
+    } else {
+        var colour = document.getElementById('colorPicker').value;
+        entity["colour"] = colour;
+    }
+
+    var radius = document.getElementById('thickness').value;
+    entity["radius"] = radius;
+
+    return entity;
+}
+
 document.getElementById("clear").addEventListener("click", clearCanvas);
 
 // 30 frames per second
-setInterval( update, 1000/30.0);
+setInterval( update, 1000 / 30.0);
 
 
 
